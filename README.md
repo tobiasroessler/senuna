@@ -1,2 +1,3 @@
 # senuna
-A lightweight BPMN workflow engine for Python
+
+Senuna is a lightweight BPMN 2.0 workflow engine for Python.
