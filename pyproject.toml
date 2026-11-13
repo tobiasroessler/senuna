@@ -31,5 +31,5 @@ xfail_strict = true
 select = ["E", "W", "F", "I", "B", "UP", "SIM"]
 
 [tool.mypy]
-files = ["src"]
+files = ["src", "tests"]
 strict = true

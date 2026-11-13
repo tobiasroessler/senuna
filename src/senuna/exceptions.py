@@ -68,3 +68,18 @@ class HandlerNotFoundError(SenunaError):
 
     def __str__(self) -> str:
         return f"No handler registered for service task '{self.task_id}'"
+
+
+class HandlerAlreadyRegisteredError(SenunaError):
+    """A service task already has a handler, and a second one was registered.
+
+    Each service task has exactly one handler, so a second one is almost
+    always a mistake, e.g. two modules using the same task id.
+    """
+
+    def __init__(self, task_id: str) -> None:
+        super().__init__(task_id)
+        self.task_id = task_id
+
+    def __str__(self) -> str:
+        return f"A handler is already registered for service task '{self.task_id}'"
