@@ -1,5 +1,7 @@
 # senuna
 
+[![CI](https://github.com/tobiasroessler/senuna/actions/workflows/ci.yml/badge.svg)](https://github.com/tobiasroessler/senuna/actions/workflows/ci.yml)
+
 Senuna is a lightweight BPMN 2.0 workflow engine for Python.
 
 - **Embedded:** a library that runs inside your Python application, not a separate server.
@@ -112,6 +114,10 @@ uv run ruff check     # lint
 uv run ruff format    # format
 uv run mypy           # type check
 ```
+
+GitHub Actions runs the same checks on every push to `main` and on every
+pull request, with the tests on Python 3.12, 3.13 and 3.14
+([`.github/workflows/ci.yml`](.github/workflows/ci.yml)).
 
 ## License
 

@@ -1,0 +1,46 @@
+# Runs the same checks as on the command line (see README, "Development")
+# on every push to main and on every pull request.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# The workflow only reads the repository.
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false # later steps don't need git access
+      - uses: astral-sh/setup-uv@v10 # installs uv; Python comes from .python-version
+      # --locked: fail if uv.lock doesn't match pyproject.toml
+      - run: uv sync --locked
+      - run: uv run ruff check
+      - run: uv run ruff format --check
+      - run: uv run mypy
+
+  test:
+    name: Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    # The job runs once per Python version in the matrix. fail-fast: false
+    # lets the other versions finish when one fails.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10
+        with:
+          python-version: ${{ matrix.python-version }} # overrides .python-version
+      - run: uv sync --locked
+      - run: uv run pytest
