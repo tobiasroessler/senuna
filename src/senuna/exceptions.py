@@ -22,8 +22,20 @@ class BpmnParseError(SenunaError):
     """The BPMN file can't be read.
 
     For example: invalid XML, a missing required attribute, or a BPMN element
-    senuna doesn't support yet.
+    senuna doesn't support yet. ``problems`` lists everything the parser found,
+    so it can all be fixed at once. ``path`` is the file, or ``None`` if the
+    BPMN came from a string.
     """
+
+    def __init__(self, problems: Sequence[str], path: str | None = None) -> None:
+        super().__init__(tuple(problems), path)
+        self.problems = tuple(problems)
+        self.path = path
+
+    def __str__(self) -> str:
+        source = f"BPMN file '{self.path}'" if self.path else "BPMN"
+        lines = "\n".join(f"- {problem}" for problem in self.problems)
+        return f"{source} can't be read:\n{lines}"
 
 
 class ProcessValidationError(SenunaError):
